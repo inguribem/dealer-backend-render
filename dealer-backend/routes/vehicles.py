@@ -17,23 +17,49 @@ def lookup_vin(vin: str):
 # GET INVENTORY
 # -------------------------
 @router.get("/inventory")
-def get_inventory():
+def get_inventory(
+    search: Optional[str] = Query(None),
+    make: Optional[str] = Query(None),
+    year: Optional[int] = Query(None)
+):
 
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM vehicles")
+    query = """
+        SELECT vin, year, make, model, price, miles,
+               trim, dealer_name, city, state
+        FROM vehicles
+        WHERE 1=1
+    """
 
+    params = []
+
+    # 🔍 SEARCH
+    if search:
+        query += " AND (vin ILIKE %s OR model ILIKE %s OR make ILIKE %s)"
+        params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
+
+    # 🎯 FILTERS
+    if make:
+        query += " AND make ILIKE %s"
+        params.append(f"%{make}%")
+
+    if year:
+        query += " AND year = %s"
+        params.append(year)
+
+    query += " ORDER BY year DESC"
+
+    cursor.execute(query, params)
     rows = cursor.fetchall()
 
     columns = [desc[0] for desc in cursor.description]
 
-    result = [dict(zip(columns, row)) for row in rows]
-
     cursor.close()
     conn.close()
 
-    return result
+    return [dict(zip(columns, row)) for row in rows]
 
 
 # -------------------------
