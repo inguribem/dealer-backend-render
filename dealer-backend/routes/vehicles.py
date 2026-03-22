@@ -55,7 +55,7 @@ def add_vehicle(vehicle: dict):
 # -------------------------
 # VEHICLE INVENTORY WITH FILTERS
 # -------------------------
-@@router.get("/inventory")
+@router.get("/inventory")
 def get_inventory(
     search: Optional[str] = Query(None),
     make: Optional[str] = Query(None),
