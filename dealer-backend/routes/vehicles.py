@@ -61,14 +61,14 @@ def get_inventory(
     search: Optional[str] = Query(None),
     make: Optional[str] = Query(None),
     year: Optional[int] = Query(None),
-    status: Optional[str] = Query(None)   # ✅ ADD THIS
+    status: Optional[str] = Query(None)
 ):
     conn = get_connection()
     cursor = conn.cursor()
 
     query = """
-        SELECT vin, year, make, model, price_purchase, miles,
-               trim, dealer_name, city, state, status
+        SELECT vin, year, make, model, price_purchase,
+               miles, trim, dealer_name, city, state, status
         FROM vehicles
         WHERE 1=1
     """
@@ -87,9 +87,8 @@ def get_inventory(
         query += " AND year = %s"
         params.append(year)
 
-    # ✅ STATUS FILTER (THIS WAS MISSING)
     if status:
-        query += " AND status = %s"
+        query += " AND LOWER(status) = LOWER(%s)"
         params.append(status)
 
     query += " ORDER BY year DESC"
