@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from db.connection import get_connection
+from database import get_connection
 
 router = APIRouter(prefix="/service-orders", tags=["Service Orders"])
 
