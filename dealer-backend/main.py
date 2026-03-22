@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import vehicles, auctions, service_orders
+from routes import vehicles, auctions, service_orders, catalog
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -16,6 +16,7 @@ app.add_middleware(
 app.include_router(vehicles.router)
 app.include_router(auctions.router)
 app.include_router(service_orders.router)
+app.include_router(catalog.router)
 
 @app.get("/")
 def root():
