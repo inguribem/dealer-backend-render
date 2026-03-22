@@ -43,6 +43,7 @@ def add_vehicle(vehicle: dict):
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",
         vehicle.get("state") or ""
+        vehicle
     ))
     conn.commit()
     cursor.close()
@@ -62,7 +63,7 @@ def get_inventory(
     cursor = conn.cursor()
     query = """
         SELECT vin, year, make, model, price, miles,
-               trim, dealer_name, city, state
+               trim, dealer_name, city, state, status
         FROM vehicles
         WHERE 1=1
     """
@@ -97,7 +98,7 @@ def update_vehicle(vin: str, vehicle: dict):
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE vehicles
-        SET year=%s, make=%s, model=%s, trim=%s, price_purchase=%s, miles=%s, dealer_name=%s, city=%s, state=%s
+        SET year=%s, make=%s, model=%s, trim=%s, price_purchase=%s, miles=%s, dealer_name=%s, city=%s, state=%s, status=%s
         WHERE vin=%s
     """, (
         vehicle.get("year") or None,
@@ -109,7 +110,7 @@ def update_vehicle(vin: str, vehicle: dict):
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",
         vehicle.get("state") or "",
-        vin
+        vehicle.get("status") or "new",
     ))
     conn.commit()
     cursor.close()

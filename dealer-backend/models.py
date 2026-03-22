@@ -12,3 +12,4 @@ class Vehicle(BaseModel):
     dealer_name: Optional[str] = ""
     city: Optional[str] = ""
     state: Optional[str] = ""
+    status: Optional[str] = "new"
