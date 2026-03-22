@@ -10,6 +10,13 @@ def create_order(vehicle_id: int):
     conn = get_connection()
     cur = conn.cursor()
 
+    # VALIDAR VEHÍCULO
+    cur.execute("SELECT id FROM vehicles WHERE id=%s", (vehicle_id,))
+    vehicle = cur.fetchone()
+
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+
     cur.execute("""
         INSERT INTO service_orders (vehicle_id, status)
         VALUES (%s, 'in_progress')
