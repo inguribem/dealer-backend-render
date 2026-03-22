@@ -80,3 +80,45 @@ def add_order_detail(item: OrderDetailCreate):
     cursor.close()
     conn.close()
     return {"status": "ok"}
+
+@router.get("/order-details")
+def get_order_details(order_id: int):
+    """
+    Devuelve todos los items asociados a una orden específica.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            SELECT id, order_id, catalog_item_id, quantity, unit_price
+            FROM order_details
+            WHERE order_id = %s
+            """,
+            (order_id,)
+        )
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        if not rows:
+            return []
+
+        # Convertimos a lista de diccionarios
+        result = [
+            {
+                "id": row[0],
+                "order_id": row[1],
+                "catalog_item_id": row[2],
+                "quantity": row[3],
+                "unit_price": float(row[4]),  # evita problemas JSON
+            }
+            for row in rows
+        ]
+        return result
+
+    except Exception as e:
+        cursor.close()
+        conn.close()
+        return {"error": str(e)}
+
