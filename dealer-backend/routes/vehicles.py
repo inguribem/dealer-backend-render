@@ -43,7 +43,8 @@ def add_vehicle(vehicle: dict):
         vehicle.get("miles") or None,
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",
-        vehicle.get("state") or ""
+        vehicle.get("state") or "",
+        vehicle.get("status") or "new"
     ))
 
     conn.commit()
@@ -112,7 +113,7 @@ def update_vehicle(vin: str, vehicle: dict):
             dealer_name=%s, city=%s, state=%s, status=%s
         WHERE vin=%s
     """, (
-        vehicle.get("year"),
+        int(vehicle.get("year")) if vehicle.get("year") else None,
         vehicle.get("make"),
         vehicle.get("model"),
         vehicle.get("trim", ""),
