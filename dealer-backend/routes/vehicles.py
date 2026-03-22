@@ -30,8 +30,8 @@ def add_vehicle(vehicle: dict):
 
     cursor.execute("""
         INSERT INTO vehicles
-        (vin, year, make, model, trim, price_purchase, miles, dealer_name, city, state)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        (vin, year, make, model, trim, price_purchase, miles, dealer_name, city, state, status)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         ON CONFLICT (vin) DO NOTHING
     """, (
         vehicle["vin"],
