@@ -67,7 +67,7 @@ def get_inventory(
     cursor = conn.cursor()
 
     query = """
-        SELECT vin, year, make, model, price_purchase,
+        SELECT id, vin, year, make, model, price_purchase,
                miles, trim, dealer_name, city, state, status
         FROM vehicles
         WHERE 1=1
