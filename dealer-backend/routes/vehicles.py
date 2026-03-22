@@ -29,7 +29,7 @@ def add_vehicle(vehicle: dict):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO vehicles
-        (vin, year, make, model, trim, price, miles, dealer_name, city, state)
+        (vin, year, make, model, trim, price_purchase, miles, dealer_name, city, state)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         ON CONFLICT (vin) DO NOTHING
     """, (
@@ -38,7 +38,7 @@ def add_vehicle(vehicle: dict):
         vehicle.get("make") or None,
         vehicle.get("model") or None,
         vehicle.get("trim") or "",
-        vehicle.get("price") or None,
+        vehicle.get("price_purchase") or None,
         vehicle.get("miles") or None,
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",
@@ -97,14 +97,14 @@ def update_vehicle(vin: str, vehicle: dict):
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE vehicles
-        SET year=%s, make=%s, model=%s, trim=%s, price=%s, miles=%s, dealer_name=%s, city=%s, state=%s
+        SET year=%s, make=%s, model=%s, trim=%s, price_purchase=%s, miles=%s, dealer_name=%s, city=%s, state=%s
         WHERE vin=%s
     """, (
         vehicle.get("year") or None,
         vehicle.get("make") or None,
         vehicle.get("model") or None,
         vehicle.get("trim") or "",
-        vehicle.get("price") or None,
+        vehicle.get("price_purchase") or None,
         vehicle.get("miles") or None,
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",

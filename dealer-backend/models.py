@@ -7,7 +7,7 @@ class Vehicle(BaseModel):
     make: Optional[str]
     model: Optional[str]
     trim: Optional[str] = ""
-    price: Optional[float] = None
+    price_purchase: Optional[float] = None
     miles: Optional[int] = None
     dealer_name: Optional[str] = ""
     city: Optional[str] = ""

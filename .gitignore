@@ -1,0 +1,21 @@
+# Entorno virtual
+venv/
+.env/
+.venv311/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos del sistema
+.DS_Store
+
+# Archive generados
+archive/
+secrets.toml
