@@ -60,7 +60,8 @@ def add_vehicle(vehicle: dict):
 def get_inventory(
     search: Optional[str] = Query(None),
     make: Optional[str] = Query(None),
-    year: Optional[int] = Query(None)
+    year: Optional[int] = Query(None),
+    status: Optional[str] = Query(None)   # ✅ ADD THIS
 ):
     conn = get_connection()
     cursor = conn.cursor()
@@ -85,6 +86,11 @@ def get_inventory(
     if year:
         query += " AND year = %s"
         params.append(year)
+
+    # ✅ STATUS FILTER (THIS WAS MISSING)
+    if status:
+        query += " AND status = %s"
+        params.append(status)
 
     query += " ORDER BY year DESC"
 
