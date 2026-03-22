@@ -27,6 +27,7 @@ def lookup_vin(vin: str):
 def add_vehicle(vehicle: dict):
     conn = get_connection()
     cursor = conn.cursor()
+
     cursor.execute("""
         INSERT INTO vehicles
         (vin, year, make, model, trim, price_purchase, miles, dealer_name, city, state)
@@ -43,17 +44,18 @@ def add_vehicle(vehicle: dict):
         vehicle.get("dealer_name") or "",
         vehicle.get("city") or "",
         vehicle.get("state") or ""
-        vehicle
     ))
+
     conn.commit()
     cursor.close()
     conn.close()
+
     return {"status": "saved"}
 
 # -------------------------
 # VEHICLE INVENTORY WITH FILTERS
 # -------------------------
-@router.get("/inventory")
+@@router.get("/inventory")
 def get_inventory(
     search: Optional[str] = Query(None),
     make: Optional[str] = Query(None),
@@ -61,12 +63,14 @@ def get_inventory(
 ):
     conn = get_connection()
     cursor = conn.cursor()
+
     query = """
-        SELECT vin, year, make, model, price, miles,
+        SELECT vin, year, make, model, price_purchase, miles,
                trim, dealer_name, city, state, status
         FROM vehicles
         WHERE 1=1
     """
+
     params = []
 
     if search:
@@ -82,11 +86,15 @@ def get_inventory(
         params.append(year)
 
     query += " ORDER BY year DESC"
+
     cursor.execute(query, params)
     rows = cursor.fetchall()
+
     columns = [desc[0] for desc in cursor.description]
+
     cursor.close()
     conn.close()
+
     return [dict(zip(columns, row)) for row in rows]
 
 # -------------------------
@@ -96,25 +104,31 @@ def get_inventory(
 def update_vehicle(vin: str, vehicle: dict):
     conn = get_connection()
     cursor = conn.cursor()
+
     cursor.execute("""
         UPDATE vehicles
-        SET year=%s, make=%s, model=%s, trim=%s, price_purchase=%s, miles=%s, dealer_name=%s, city=%s, state=%s, status=%s
+        SET year=%s, make=%s, model=%s, trim=%s,
+            price_purchase=%s, miles=%s,
+            dealer_name=%s, city=%s, state=%s, status=%s
         WHERE vin=%s
     """, (
-        vehicle.get("year") or None,
-        vehicle.get("make") or None,
-        vehicle.get("model") or None,
-        vehicle.get("trim") or "",
-        vehicle.get("price_purchase") or None,
-        vehicle.get("miles") or None,
-        vehicle.get("dealer_name") or "",
-        vehicle.get("city") or "",
-        vehicle.get("state") or "",
-        vehicle.get("status") or "new",
+        vehicle.get("year"),
+        vehicle.get("make"),
+        vehicle.get("model"),
+        vehicle.get("trim", ""),
+        vehicle.get("price_purchase"),
+        vehicle.get("miles"),
+        vehicle.get("dealer_name", ""),
+        vehicle.get("city", ""),
+        vehicle.get("state", ""),
+        vehicle.get("status", "new"),
+        vin
     ))
+
     conn.commit()
     cursor.close()
     conn.close()
+
     return {"status": "updated"}
 
 # -------------------------
