@@ -122,3 +122,51 @@ def get_order_details(order_id: int):
         conn.close()
         return {"error": str(e)}
 
+@router.put("/service-orders/{order_id}")
+def update_service_order(order_id: int, status: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE service_orders SET status = %s WHERE id = %s",
+        (status, order_id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {"status": "ok"}
+
+@router.delete("/service-orders/{order_id}")
+def delete_service_order(order_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    # Opcional: eliminar también order_details relacionados
+    cursor.execute("DELETE FROM order_details WHERE order_id = %s", (order_id,))
+    cursor.execute("DELETE FROM service_orders WHERE id = %s", (order_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {"status": "ok"}
+
+@router.put("/order-details/{detail_id}")
+def update_order_detail(detail_id: int, quantity: int, unit_price: float):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE order_details SET quantity = %s, unit_price = %s WHERE id = %s",
+        (quantity, unit_price, detail_id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {"status": "ok"}
+
+@router.delete("/order-details/{detail_id}")
+def delete_order_detail(detail_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM order_details WHERE id = %s", (detail_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {"status": "ok"}
+
