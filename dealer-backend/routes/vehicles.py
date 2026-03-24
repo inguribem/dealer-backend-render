@@ -87,6 +87,10 @@ def add_vehicle(vehicle: dict):
     cursor.close()
     conn.close()
 
+    print("📡 Llamando a Slack...")
+
+    send_slack_notification(vehicle)
+
     return {"status": "saved"}
 
 # -------------------------
