@@ -14,7 +14,7 @@ def fetch_vehicle(vin: str, response_url: str):
         print("➡️ Consultando API...")
         res = requests.get(f"{API_URL}/reports/vehicle/{vin}")
         print("STATUS:", res.status_code)
-
+        print("DATA:", data)
         data = res.json()
 
         print("➡️ Enviando respuesta a Slack...")
