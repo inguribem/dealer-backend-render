@@ -18,7 +18,7 @@ app.include_router(auctions.router)
 app.include_router(service_orders.router)
 app.include_router(catalog.router)
 app.include_router(reports.router)
-app.include_router(reports.slack)
+app.include_router(slack.router)
 
 @app.get("/")
 def root():
