@@ -22,7 +22,7 @@ def fetch_vehicle(vin: str, response_url: str):
         r = requests.post(response_url, json={
             "text": f"🚗 VIN: {vin}\nEstado: {data.get('status')}"
         })
-
+        print("RESPONSE JSON:", res.json())
         print("SLACK STATUS:", r.status_code)
         print("SLACK RESPONSE:", r.text)
 
