@@ -6,6 +6,32 @@ import os
 
 router = APIRouter(prefix="/vehicles")
 
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+
+# -------------------------
+# SEND SLACK NOTIFICATION
+# -------------------------
+def send_slack_notification(vehicle):
+    if not SLACK_WEBHOOK_URL:
+        print("⚠️ Slack webhook not configured")
+        return
+
+    message = {
+        "text": f"""
+🚗 *New Vehicle Added*
+VIN: {vehicle.get("vin")}
+{vehicle.get("year", "")} {vehicle.get("make", "")} {vehicle.get("model", "")}
+💰 Price: ${vehicle.get("price_purchase", 0)}
+📍 {vehicle.get("city", "")}, {vehicle.get("state", "")}
+Status: {vehicle.get("status", "new")}
+"""
+    }
+
+    try:
+        requests.post(SLACK_WEBHOOK_URL, json=message, timeout=5)
+    except Exception as e:
+        print(f"❌ Slack error: {e}")
+
 # -------------------------
 # VIN Lookup via NHTSA
 # -------------------------
