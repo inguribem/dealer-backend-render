@@ -70,3 +70,7 @@ Precio: {data.get('price')}
             "response_type": "ephemeral",
             "text": f"Error técnico: {str(e)}"
         }
+    
+@router.get("/slack/oauth/callback")
+def slack_oauth_callback():
+    return {"status": "ok"}
