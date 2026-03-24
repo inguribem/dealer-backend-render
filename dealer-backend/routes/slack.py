@@ -38,7 +38,7 @@ async def slack_vehiculo(text: str = Form(...)):
         }
 
     try:
-        response = requests.get(f"{API_URL}/reports/vehicle/{vin}")
+        response = requests.get(f"{API_URL}/vehicle/{vin}")
 
         # 🔹 Validación 3: respuesta backend
         if response.status_code == 404:
