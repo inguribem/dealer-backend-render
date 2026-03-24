@@ -16,19 +16,29 @@ def send_slack_notification(vehicle):
         print("⚠️ Slack webhook not configured")
         return
 
-    message = {
-        "text": f"""
-🚗 *New Vehicle Added*
+    text = f"""
+🚗 New Vehicle Added
 VIN: {vehicle.get("vin")}
 {vehicle.get("year", "")} {vehicle.get("make", "")} {vehicle.get("model", "")}
 💰 Price: ${vehicle.get("price_purchase", 0)}
 📍 {vehicle.get("city", "")}, {vehicle.get("state", "")}
 Status: {vehicle.get("status", "new")}
 """
+
+    payload = {
+        "text": text.strip()
     }
 
     try:
-        requests.post(SLACK_WEBHOOK_URL, json=message, timeout=5)
+        response = requests.post(
+            SLACK_WEBHOOK_URL,
+            json=payload,
+            timeout=5
+        )
+
+        print("Slack status:", response.status_code)
+        print("Slack response:", response.text)
+
     except Exception as e:
         print(f"❌ Slack error: {e}")
 
