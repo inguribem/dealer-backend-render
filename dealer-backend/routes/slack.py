@@ -11,23 +11,23 @@ def fetch_vehicle(vin: str, response_url: str):
     import requests
 
     try:
-        print("➡️ Consultando API...")
-        res = requests.get(f"{API_URL}/reports/vehicle", params={"vin": vin})
-        print("STATUS:", res.status_code)
-        
+        res = requests.get(
+            f"{API_URL}/reports/vehicle",
+            params={"vin": vin},
+            timeout=10
+        )
+
         data = res.json()
 
-        print("➡️ Enviando respuesta a Slack...")
-
-        r = requests.post(response_url, json={
-            "text": f"🚗 VIN: {vin}\nEstado: {data.get('status')}"
+        # 👇 DEBUG DIRECTO A SLACK
+        requests.post(response_url, json={
+            "text": f"DEBUG JSON:\n{data}"
         })
-        print("RESPONSE JSON:", res.json())
-        print("SLACK STATUS:", r.status_code)
-        print("SLACK RESPONSE:", r.text)
 
     except Exception as e:
-        print("ERROR:", str(e))
+        requests.post(response_url, json={
+            "text": f"ERROR: {str(e)}"
+        })
 
 
 @router.post("/slack/vehicle")
