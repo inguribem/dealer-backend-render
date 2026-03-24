@@ -19,14 +19,30 @@ def fetch_vehicle(vin: str, response_url: str):
 
         data = res.json()
 
-        # 👇 DEBUG DIRECTO A SLACK
+        vehicle = data.get("vehicle", {})
+        summary = data.get("summary", {})
+
+        estado = vehicle.get("status", "No disponible")
+        precio = vehicle.get("price_purchase", "N/A")
+        total_orders = summary.get("total_orders", 0)
+        total_spent = summary.get("total_spent", 0)
+
         requests.post(response_url, json={
-            "text": f"DEBUG JSON:\n{data}"
+            "response_type": "in_channel",
+            "text": f"""
+🚗 *Reporte de Vehículo*
+VIN: {vin}
+Estado: {estado}
+💰 Compra: ${precio}
+
+📦 Órdenes: {total_orders}
+💸 Total invertido: ${total_spent}
+"""
         })
 
     except Exception as e:
         requests.post(response_url, json={
-            "text": f"ERROR: {str(e)}"
+            "text": f"Error: {str(e)}"
         })
 
 
