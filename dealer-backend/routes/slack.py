@@ -34,7 +34,7 @@ def fetch_vehicles_by_year(year: str, response_url: str):
             text_result = f"No encontré vehículos del año *{year}*."
         else:
             count = len(vehicles)
-            list_text = "\n".join([f"• {v.get('brand')} {v.get('model')} (VIN: {v.get('vin')})" for v in vehicles[:5]])
+            list_text = "\n".join([f"• {v.get('make')} {v.get('model')} (VIN: {v.get('vin')}) (Status: {v.get('status')})" for v in vehicles[:5]])
             text_result = f"📅 *Vehículos {year}* ({count} total):\n{list_text}"
 
         # 2. Enviamos la respuesta real a Slack mediante el response_url
