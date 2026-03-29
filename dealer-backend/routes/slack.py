@@ -74,3 +74,7 @@ async def slack_por_anio(
         "response_type": "ephemeral",
         "text": f"🔎 Procesando búsqueda para el año {year}..."
     }
+
+@router.get("/slack/oauth/callback")
+def slack_oauth_callback():
+    return {"status": "ok"}
