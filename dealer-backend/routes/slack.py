@@ -26,7 +26,7 @@ def fetch_vehicles_by_year(year: str, response_url: str):
     """Toda la lógica de red ocurre aquí, fuera del ciclo de respuesta de Slack"""
     try:
         # 1. Consulta a la API externa
-        res = requests.get(f"{API_URL}/vehicles", params={"year": year}, timeout=8)
+        res = requests.get(f"{API_URL}/vehicles/inventory", params={"year": year}, timeout=10)
         res.raise_for_status()
         vehicles = res.json()
 
